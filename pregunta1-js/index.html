@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Ejercicio de arrays de objetos, filtros y DOM en JavaScript." />
+    <title>Equipos con títulos nacionales</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <main class="contenedor">
+      <header class="encabezado">
+        <p class="etiqueta">Manipulación de datos · JavaScript</p>
+        <h1>Equipos con 20 o más títulos nacionales</h1>
+        <p class="introduccion">Presiona el botón para filtrar los equipos y ver sus datos principales.</p>
+        <button id="boton-procesar" type="button">Boton Javascript</button>
+      </header>
+
+      <section class="resultados" aria-live="polite" aria-labelledby="titulo-resultados">
+        <h2 id="titulo-resultados">Resultados</h2>
+        <p id="mensaje-inicial" class="mensaje">Los equipos aparecerán aquí.</p>
+        <ol id="lista-equipos" class="lista-equipos"></ol>
+      </section>
+      <footer>Para este ejercicio, “títulos nacionales” se refiere a campeonatos de liga de primera división.</footer>
+    </main>
+  </body>
+</html>

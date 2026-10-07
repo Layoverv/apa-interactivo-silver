@@ -1,0 +1,16 @@
+# Configuración local: contiene la conexión al proyecto Supabase real.
+supabase-config.js
+
+# Dependencias y archivos generados.
+node_modules/
+dist/
+build/
+.DS_Store
+*.log
+
+# Configuración local de editores.
+.vscode/
+.idea/
+
+# Herramientas internas locales; no pertenecen al producto publicado.
+.agents/
