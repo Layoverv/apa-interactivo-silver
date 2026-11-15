@@ -91,5 +91,5 @@ Decisión tomada por el equipo el 15-nov-2026: **alternativa A**. Queda pendient
 | 6 | Evaluación aleatoria, resultado y progreso (HU-07, HU-08, HU-09) | 5 | Alto | `EvaluacionController`, `services/Calificador.php` |
 | 7 | Profesor (HU-11, HU-12) y administración (HU-14, HU-17) | 6 | Medio | `ProfesorController`, `AdminController` |
 | 8 | Generador de contenidos (HU-15, HU-16) | 4 | Medio | `GestionController` |
-| 9 | Banco de 36 ejercicios clasificado; contenido de los cinco temas | 2 | Medio (R3: revisión del asesor) | `database/seed.sql` |
+| 9 | Banco de 45 ejercicios clasificado; contenido de los cinco temas | 2 | Medio (R3: revisión del asesor) | `database/seed.sql` |
 | 10 | Pruebas automatizadas, pruebas en navegador y documentación | 3–9 | Bajo | `tests/`, `docs/` |
