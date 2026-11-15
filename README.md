@@ -49,7 +49,6 @@ Crean una base de datos aparte (`apa_pruebas`), instalan todo desde cero, levant
 | `config/` | Configuración local (`config.php` no se sube al repositorio). |
 | `database/` | `schema.sql` (14 tablas), `seed.sql` (contenido inicial), instalador y creación de administrador. |
 | `tests/` | Pruebas funcionales automatizadas. |
-| `docs/` | Diagnóstico inicial y matriz de cumplimiento. |
 
 ## Seguridad
 

@@ -63,11 +63,6 @@ final class ClienteHttp
         return $this->post('/salir');
     }
 
-    public function token(): string
-    {
-        return $this->token;
-    }
-
     public function cookieSesion(): ?string
     {
         foreach (file($this->cookies) ?: [] as $linea) {

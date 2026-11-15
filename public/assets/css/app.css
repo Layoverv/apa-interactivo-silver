@@ -19,7 +19,7 @@
 }
 
 body { background: var(--apa-fondo); font-family: system-ui, "Segoe UI", Roboto, Arial, sans-serif; }
-h1, h2, h3, .h1, .h2, .h3, .h4, .h5 { color: var(--apa-azul-oscuro); }
+h1, h2, h3, .h2, .h3, .h4, .h5 { color: var(--apa-azul-oscuro); }
 
 .btn-primary { --bs-btn-bg: #1769aa; --bs-btn-border-color: #1769aa; --bs-btn-hover-bg: #0e5792; --bs-btn-hover-border-color: #0e5792; --bs-btn-active-bg: #0c4a7c; --bs-btn-disabled-bg: #1769aa; --bs-btn-disabled-border-color: #1769aa; }
 .btn-outline-primary { --bs-btn-color: #1769aa; --bs-btn-border-color: #1769aa; --bs-btn-hover-bg: #1769aa; --bs-btn-hover-border-color: #1769aa; --bs-btn-active-bg: #0e5792; --bs-btn-active-border-color: #0e5792; }
