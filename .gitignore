@@ -1,16 +1,15 @@
-# Configuración local: contiene la conexión al proyecto Supabase real.
-supabase-config.js
+# Configuración local con credenciales (Tabla 21, configuración insegura).
+config/config.php
 
-# Dependencias y archivos generados.
-node_modules/
-dist/
-build/
-.DS_Store
+# Archivos generados y de entorno.
+tests/salida/
 *.log
+.DS_Store
+Thumbs.db
 
 # Configuración local de editores.
 .vscode/
 .idea/
 
-# Herramientas internas locales; no pertenecen al producto publicado.
+# Herramientas internas locales; no pertenecen al producto.
 .agents/

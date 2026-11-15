@@ -1,0 +1,10 @@
+# Permite abrir la aplicación en http://localhost/<carpeta-del-proyecto>/ dentro de htdocs (XAMPP).
+# Solo la carpeta public es accesible desde el navegador; el resto del código queda protegido.
+Options -Indexes
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^(app|config|database|tests|docs)(/.*)?$ - [F,L]
+    RewriteRule ^(\.git|\.env|README\.md|\.gitignore)(/.*)?$ - [F,L]
+    RewriteCond %{REQUEST_URI} !/public/
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
