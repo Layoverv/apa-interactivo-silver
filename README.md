@@ -108,11 +108,11 @@ En nivel avanzado hay pocos ejercicios en Citas textuales cortas (1) y Paráfras
 
 ### Pruebas realizadas
 
-- **58 pruebas automatizadas** en `tests/ejecutar.php`. Cada una verifica un criterio de aceptación de las historias de usuario. Instalan una base de datos de prueba desde cero, recorren la aplicación como lo haría un navegador y la borran al terminar.
+- **58 pruebas automatizadas**, todas superadas, en `tests/ejecutar.php`. Cada una verifica un criterio de aceptación de las historias de usuario. Instalan una base de datos de prueba desde cero, recorren la aplicación como lo haría un navegador y la borran al terminar.
 - **Recorrido en Chrome** (registro, práctica, evaluación, progreso y paneles de administración) en pantallas de computador (1280 px), tableta (768 px) y celular (360 px).
 - **Prueba en Apache** con el proyecto en una subcarpeta, igual que en XAMPP. Las carpetas `app`, `config`, `database`, `tests` y `.git` responden con 403, es decir, no se pueden abrir desde el navegador.
 
-Las pruebas se ejecutaron con PHP 8.3 y MariaDB 10.11, y todas se superaron antes de los ajustes del 15/11/2026 (ver pendientes).
+Las 58 pruebas se superaron con PHP 8.3 y MariaDB 10.11 y, después de los ajustes del 15/11/2026, el 16/11/2026 en XAMPP sobre Windows (PHP 8.5 y MariaDB 10.11). El recorrido en Chrome se hizo antes de esos ajustes (ver pendientes).
 
 ---
 
@@ -120,7 +120,7 @@ Las pruebas se ejecutaron con PHP 8.3 y MariaDB 10.11, y todas se superaron ante
 
 | Pendiente | Responsable | Por qué |
 |---|---|---|
-| Volver a correr las 58 pruebas y el recorrido en Chrome | Equipo | Después de los ajustes del 15/11/2026 (menú del administrador, sesión vencida, gráficas, orden de la práctica) solo se revisó la sintaxis; falta la ejecución completa con base de datos. |
+| Repetir el recorrido en Chrome | Equipo | Las 58 pruebas ya pasan con los ajustes del 15/11/2026 (menú del administrador, sesión vencida, gráficas, orden de la práctica), pero esos cambios visuales no se han revisado en el navegador. |
 | Informar al asesor el cambio de Supabase a PHP + MySQL | Equipo | El documento ya describe PHP + MySQL; el código ahora coincide con él. |
 | Subir la rama `migracion-php` a GitHub y unirla a `main` | Jose Luis, o el integrante que agregue como colaborador | El repositorio está en la cuenta `Layoverv`. |
 | Instalar y correr las pruebas en el XAMPP de cada integrante | Cada integrante | Confirmar que todo funciona en Windows con la versión de XAMPP que tiene cada uno. |
