@@ -7,17 +7,30 @@ use App\Core\Database as DB;
 
 final class Ejercicio
 {
-    /** Ejercicios activos de un tema publicado, opcionalmente de un solo nivel (HU-05). */
+    /**
+     * Ejercicios activos de un tema publicado, opcionalmente de un solo nivel (HU-05). Van de
+     * básico a avanzado y, dentro de cada nivel, en orden aleatorio para que repetir una
+     * práctica no sea memorizar la secuencia.
+     */
     public static function idsParaPractica(int $temaId, ?int $dificultad): array
     {
-        $sql = 'SELECT e.id FROM ejercicios e JOIN temas t ON t.id = e.tema_id
+        $sql = 'SELECT e.id, e.dificultad FROM ejercicios e JOIN temas t ON t.id = e.tema_id
                 WHERE e.tema_id = ? AND e.activo = 1 AND t.publicado = 1';
         $p = [$temaId];
         if ($dificultad !== null) {
             $sql .= ' AND e.dificultad = ?';
             $p[] = $dificultad;
         }
-        return array_map('intval', array_column(DB::filas($sql . ' ORDER BY e.dificultad, e.id', $p), 'id'));
+        $porNivel = [];
+        foreach (DB::filas($sql . ' ORDER BY e.dificultad', $p) as $f) {
+            $porNivel[(int) $f['dificultad']][] = (int) $f['id'];
+        }
+        $ids = [];
+        foreach ($porNivel as $grupo) {
+            shuffle($grupo);
+            array_push($ids, ...$grupo);
+        }
+        return $ids;
     }
 
     /** Cantidad de ejercicios activos por tema y nivel, para el formulario de práctica. */

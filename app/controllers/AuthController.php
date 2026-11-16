@@ -57,11 +57,7 @@ final class AuthController
             $errores[] = 'Ya existe una cuenta con ese correo. Inicia sesión o usa otro correo.';
         }
         if ($errores !== []) {
-            foreach ($errores as $error) {
-                Sesion::flash('danger', $error);
-            }
-            Sesion::guardarFormulario($_POST);
-            redirigir('/registro');
+            volver_con_errores($errores, '/registro');
         }
 
         // La cuenta nueva siempre queda con rol estudiante (HU-01, criterio 4).
@@ -120,6 +116,15 @@ final class AuthController
         redirigir('/');
     }
 
+    /**
+     * Mantiene viva la sesión mientras el estudiante responde la evaluación: cada petición
+     * renueva el tiempo de inactividad (Sesion::iniciar). Sin sesión responde 401.
+     */
+    public function mantenerSesion(): void
+    {
+        json_respuesta(['activa' => true]);
+    }
+
     public function formularioAceptarPolitica(): void
     {
         if (Auth::usuario()['acepto_politica_en'] !== null) {
@@ -155,10 +160,7 @@ final class AuthController
             $errores[] = 'La nueva contraseña debe ser distinta de la actual.';
         }
         if ($errores !== []) {
-            foreach ($errores as $error) {
-                Sesion::flash('danger', $error);
-            }
-            redirigir('/cambiar-clave');
+            volver_con_errores($errores, '/cambiar-clave');
         }
         Usuario::cambiarClave(Auth::id(), $nueva, false);
         Sesion::regenerar();

@@ -60,7 +60,7 @@ final class AdminController
         $clave = (string) ($_POST['clave'] ?? '');
         $errores = array_merge($errores, AuthController::validarClave($clave, (string) ($_POST['confirmacion'] ?? '')));
         if ($errores !== []) {
-            self::volver($errores, '/admin/usuarios/nuevo');
+            volver_con_errores($errores, '/admin/usuarios/nuevo');
         }
         // La clave es temporal: el usuario debe cambiarla y aceptar la política al ingresar.
         $id = Usuario::crear($datos + ['clave' => $clave, 'debe_cambiar_clave' => 1]);
@@ -89,9 +89,14 @@ final class AdminController
             $errores = array_merge($errores, AuthController::validarClave($clave, (string) ($_POST['confirmacion'] ?? '')));
         }
         if ($errores !== []) {
-            self::volver($errores, '/admin/usuarios/' . $id);
+            volver_con_errores($errores, '/admin/usuarios/' . $id);
         }
         Usuario::actualizar($id, $datos['nombre'], $datos['correo'], $datos['rol_id']);
+        // Los grupos son de estudiantes: si deja de serlo, sale de sus grupos para no
+        // contar en los resultados del profesor. Sus intentos se conservan.
+        if ($datos['rol_id'] !== Usuario::rolIdPorClave('estudiante')) {
+            Grupo::quitarDeTodos($id);
+        }
         if ($clave !== '') {
             Usuario::cambiarClave($id, $clave, true);
         }
@@ -125,7 +130,7 @@ final class AdminController
     {
         [$nombre, $periodo, $profesorId, $errores] = self::validarGrupo(0);
         if ($errores !== []) {
-            self::volver($errores, '/admin/grupos');
+            volver_con_errores($errores, '/admin/grupos');
         }
         $id = Grupo::crear($nombre, $periodo, $profesorId);
         Sesion::flash('success', 'Grupo creado. Ahora agrega sus estudiantes.');
@@ -149,7 +154,7 @@ final class AdminController
         Grupo::buscar($id) ?? abortar(404);
         [$nombre, $periodo, $profesorId, $errores] = self::validarGrupo($id);
         if ($errores !== []) {
-            self::volver($errores, '/admin/grupos/' . $id);
+            volver_con_errores($errores, '/admin/grupos/' . $id);
         }
         Grupo::actualizar($id, $nombre, $periodo, $profesorId, ($_POST['activo'] ?? '') === '1');
         Sesion::flash('success', 'Grupo actualizado.');
@@ -218,15 +223,6 @@ final class AdminController
             $errores[] = 'Ya existe un grupo con ese nombre en ese periodo.';
         }
         return [$nombre, $periodo, $profesorId, $errores];
-    }
-
-    private static function volver(array $errores, string $ruta): never
-    {
-        foreach ($errores as $error) {
-            Sesion::flash('danger', $error);
-        }
-        Sesion::guardarFormulario($_POST);
-        redirigir($ruta);
     }
 
     private static function fecha(?string $valor): ?string

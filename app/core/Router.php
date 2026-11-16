@@ -41,6 +41,11 @@ final class Router
                 continue;
             }
             if ($metodo === 'POST' && !Csrf::valido(Csrf::tokenDePeticion())) {
+                // En una ruta que exige sesión, un token vencido sin usuario significa que la
+                // sesión se cerró (por ejemplo, por inactividad): se pide iniciar sesión.
+                if ($r['roles'] !== null && Auth::usuario() === null) {
+                    throw new HttpException(401);
+                }
                 throw new HttpException(419, 'La página expiró. Recarga e inténtalo de nuevo.');
             }
             if ($r['roles'] !== null) {

@@ -3,8 +3,9 @@
 // config.php está excluido del repositorio (.gitignore) porque contiene credenciales.
 
 return [
-    // 'desarrollo' muestra los errores detallados; 'produccion' los oculta (Tabla 21, A05).
-    'entorno' => 'desarrollo',
+    // 'produccion' oculta los errores detallados (Tabla 21, A05). Usa 'desarrollo' solo
+    // mientras programas, porque muestra en pantalla los mensajes internos de los errores.
+    'entorno' => 'produccion',
 
     // Conexión a MySQL/MariaDB. En XAMPP el usuario por defecto es root sin contraseña;
     // para las pruebas con usuarios se recomienda crear un usuario propio con contraseña.

@@ -12,7 +12,10 @@ final class Permisos
     public const GENERADOR = 'generador';
     public const ADMINISTRADOR = 'administrador';
 
-    /** Enlaces del menú principal según el rol. */
+    /**
+     * Enlaces del menú principal según el rol. Cada elemento es [ruta, texto] o, para un
+     * submenú, [ruta principal, texto, [[ruta, texto], ...]].
+     */
     public static function menu(?string $rol): array
     {
         return match ($rol) {
@@ -28,7 +31,8 @@ final class Permisos
             ],
             self::ADMINISTRADOR => [
                 ['/admin', 'Estadísticas'], ['/admin/usuarios', 'Usuarios'], ['/admin/grupos', 'Grupos'],
-                ['/profesor', 'Resultados'], ['/gestion', 'Contenidos'],
+                ['/profesor', 'Resultados'],
+                ['/gestion', 'Contenidos', [['/gestion', 'Temas'], ['/gestion/ejercicios', 'Ejercicios'], ['/gestion/recursos', 'Recursos']]],
             ],
             default => [],
         };

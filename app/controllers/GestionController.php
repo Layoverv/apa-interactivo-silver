@@ -32,7 +32,7 @@ final class GestionController
     {
         [$d, $errores] = self::validarTema();
         if ($errores !== []) {
-            self::volver($errores, '/gestion/temas/nuevo');
+            volver_con_errores($errores, '/gestion/temas/nuevo');
         }
         $id = Tema::crear($d['titulo'], $d['resumen'], $d['contenido'], $d['publicado'], Auth::id());
         Sesion::flash('success', 'Tema creado. Agrega al menos un ejemplo correcto y uno incorrecto.');
@@ -52,7 +52,7 @@ final class GestionController
         Tema::buscar($id) ?? abortar(404);
         [$d, $errores] = self::validarTema();
         if ($errores !== []) {
-            self::volver($errores, '/gestion/temas/' . $id);
+            volver_con_errores($errores, '/gestion/temas/' . $id);
         }
         Tema::actualizar($id, $d['titulo'], $d['resumen'], $d['contenido'], $d['publicado']);
         Sesion::flash('success', 'Tema guardado. Los cambios ya se ven en el módulo de contenido.');
@@ -83,7 +83,7 @@ final class GestionController
         Tema::buscar($id) ?? abortar(404);
         [$d, $errores] = self::validarEjemplo();
         if ($errores !== []) {
-            self::volver($errores, '/gestion/temas/' . $id . '#ejemplos');
+            volver_con_errores($errores, '/gestion/temas/' . $id . '#ejemplos');
         }
         Ejemplo::crear($id, $d['es_correcto'], $d['texto'], $d['explicacion']);
         Sesion::flash('success', 'Ejemplo agregado.');
@@ -95,7 +95,7 @@ final class GestionController
         $ejemplo = Ejemplo::buscar($id) ?? abortar(404);
         [$d, $errores] = self::validarEjemplo();
         if ($errores !== []) {
-            self::volver($errores, '/gestion/temas/' . $ejemplo['tema_id'] . '#ejemplos');
+            volver_con_errores($errores, '/gestion/temas/' . $ejemplo['tema_id'] . '#ejemplos');
         }
         Ejemplo::actualizar($id, $d['es_correcto'], $d['texto'], $d['explicacion']);
         Sesion::flash('success', 'Ejemplo actualizado.');
@@ -137,7 +137,7 @@ final class GestionController
     {
         [$d, $opciones, $correcta, $enEvaluacion, $errores] = self::validarEjercicio();
         if ($errores !== []) {
-            self::volver($errores, '/gestion/ejercicios/nuevo');
+            volver_con_errores($errores, '/gestion/ejercicios/nuevo');
         }
         $id = Ejercicio::guardar(null, $d, $opciones, $correcta, $enEvaluacion, Auth::id());
         Sesion::flash('success', 'Ejercicio creado y activo.');
@@ -158,12 +158,12 @@ final class GestionController
         Ejercicio::buscar($id) ?? abortar(404);
         [$d, $opciones, $correcta, $enEvaluacion, $errores] = self::validarEjercicio();
         if ($errores !== []) {
-            self::volver($errores, '/gestion/ejercicios/' . $id);
+            volver_con_errores($errores, '/gestion/ejercicios/' . $id);
         }
         try {
             Ejercicio::guardar($id, $d, $opciones, $correcta, $enEvaluacion, Auth::id());
         } catch (\DomainException $error) {
-            self::volver([$error->getMessage()], '/gestion/ejercicios/' . $id);
+            volver_con_errores([$error->getMessage()], '/gestion/ejercicios/' . $id);
         }
         Sesion::flash('success', 'Ejercicio guardado.');
         redirigir('/gestion/ejercicios/' . $id);
@@ -190,7 +190,7 @@ final class GestionController
     {
         [$d, $errores] = self::validarRecurso(0);
         if ($errores !== []) {
-            self::volver($errores, '/gestion/recursos');
+            volver_con_errores($errores, '/gestion/recursos');
         }
         Recurso::crear($d);
         Sesion::flash('success', 'Recurso agregado.');
@@ -202,7 +202,7 @@ final class GestionController
         Recurso::buscar($id) ?? abortar(404);
         [$d, $errores] = self::validarRecurso($id);
         if ($errores !== []) {
-            self::volver($errores, '/gestion/recursos');
+            volver_con_errores($errores, '/gestion/recursos');
         }
         Recurso::actualizar($id, $d);
         Sesion::flash('success', 'Recurso actualizado.');
@@ -335,14 +335,5 @@ final class GestionController
             $d['tipo'] = 'Académico';
         }
         return [$d, $errores];
-    }
-
-    private static function volver(array $errores, string $ruta): never
-    {
-        foreach ($errores as $error) {
-            Sesion::flash('danger', $error);
-        }
-        Sesion::guardarFormulario($_POST);
-        redirigir($ruta);
     }
 }

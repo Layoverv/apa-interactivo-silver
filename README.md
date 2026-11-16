@@ -57,7 +57,7 @@ La primera versión del prototipo usaba Supabase. Se reemplazó para que el cód
 | **Estudiante** | Se registra solo. Estudia los temas, practica, presenta la evaluación y consulta su progreso. |
 | **Profesor** | Ve los resultados y los errores frecuentes de sus grupos, y descarga los resultados en CSV. |
 | **Generador de contenidos** | Administra temas, ejemplos, ejercicios y recursos. |
-| **Administrador** | Gestiona usuarios, roles y grupos. Consulta las estadísticas generales. |
+| **Administrador** | Gestiona usuarios, roles y grupos, consulta las estadísticas generales y también puede administrar los contenidos (menú **Contenidos**). |
 
 ### Funcionalidades (historias de usuario)
 
@@ -67,16 +67,16 @@ La primera versión del prototipo usaba Supabase. Se reemplazó para que el cód
 | HU-02 | Inicio y cierre de sesión. Bloqueo de 15 minutos tras 5 intentos fallidos. Cierre automático tras 30 minutos sin actividad. | ✓ Implementada |
 | HU-03 | Cinco temas en orden: formato general, citas textuales cortas, citas textuales largas, paráfrasis y lista de referencias. | ✓ Implementada |
 | HU-04 | Ejemplos correctos e incorrectos en cada tema. El incorrecto explica el error y su corrección, con ícono y texto. | ✓ Implementada |
-| HU-05 | Práctica por tema y nivel (básico, intermedio, avanzado), un ejercicio a la vez, con el resumen de aciertos al final. | ✓ Implementada |
+| HU-05 | Práctica por tema y nivel (básico, intermedio, avanzado), un ejercicio a la vez, con el resumen de aciertos al final. Los ejercicios van de básico a avanzado y, dentro de cada nivel, en orden aleatorio. | ✓ Implementada |
 | HU-06 | Retroalimentación inmediata: si la respuesta es correcta, la explicación y, si falló, la opción correcta. | ✓ Implementada |
-| HU-07 | Evaluación de 10 preguntas al azar de todos los temas. Sin retroalimentación hasta enviar y sin poder enviarla incompleta. | ✓ Implementada |
+| HU-07 | Evaluación de 10 preguntas al azar de todos los temas. Sin retroalimentación hasta enviar y sin poder enviarla incompleta. Las respuestas se guardan en el navegador mientras se responde, para no perderlas si la sesión se cierra antes de enviar. | ✓ Implementada |
 | HU-08 | Resultado con puntaje, tasa de éxito, revisión de cada pregunta, aciertos por tema y temas para reforzar. | ✓ Implementada |
 | HU-09 | Progreso con historial de intentos, gráfica de evolución y avance por tema. | ✓ Implementada |
 | HU-10 | Recursos: bases de datos de la Biblioteca UNIAJC, Google Académico, Zotero y Mendeley. | ✓ Implementada |
 | HU-11 | El profesor ve solo sus grupos: último puntaje, mejor tasa y número de intentos por estudiante, con detalle de cada uno. | ✓ Implementada |
 | HU-12 | Porcentaje de error por tema y por tipo de error en cada grupo, de mayor a menor, con gráfica. | ✓ Implementada |
 | HU-13 | Exportación de resultados en CSV. | ✓ Implementada (el documento la clasifica como *Won't have*; ver pendientes) |
-| HU-14 | Crear, editar y desactivar usuarios; asignar roles; crear grupos con profesor y estudiantes. | ✓ Implementada |
+| HU-14 | Crear, editar y desactivar usuarios; asignar roles; crear grupos con profesor y estudiantes. Si un estudiante cambia de rol, sale de sus grupos (sus resultados se conservan). | ✓ Implementada |
 | HU-15 | Crear, editar, ordenar, ocultar y eliminar temas, con formato básico y ejemplos. | ✓ Implementada |
 | HU-16 | Banco de ejercicios con tema, tipo de error, nivel, entre 2 y 4 opciones, respuesta correcta y explicación. Se desactivan sin borrarse. | ✓ Implementada |
 | HU-17 | Estadísticas: usuarios, evaluaciones y tasa de éxito promedio frente a la meta del 70 %, con filtros por grupo y fechas. | ✓ Implementada |
@@ -90,6 +90,8 @@ La primera versión del prototipo usaba Supabase. Se reemplazó para que el cód
 - **La respuesta correcta varía de posición**; no siempre es la A.
 - **1 evaluación final** de 10 preguntas y **4 recursos** recomendados.
 
+En nivel avanzado hay pocos ejercicios en Citas textuales cortas (1) y Paráfrasis (1): practicar ese nivel en esos temas es un solo ejercicio (ver pendientes).
+
 ### Seguridad
 
 | Riesgo | Cómo se controla |
@@ -100,17 +102,17 @@ La primera versión del prototipo usaba Supabase. Se reemplazó para que el cód
 | Fuerza bruta | Bloqueo temporal tras 5 intentos y mensajes de error genéricos. |
 | Acceso indebido | El rol se verifica en el servidor en cada ruta. Un usuario desactivado pierde la sesión de inmediato. |
 | Robo de sesión | Identificador nuevo al ingresar, cookies HttpOnly y SameSite, y cierre por inactividad. |
-| Falsificación de peticiones (CSRF) | Token en cada formulario y en cada petición de la práctica. |
+| Falsificación de peticiones (CSRF) | Token en cada formulario y en cada petición de la práctica. Si la sesión ya se cerró, la aplicación pide iniciar sesión en vez de mostrar un error. |
 | Trampa en evaluaciones | La calificación ocurre solo en el servidor. Las respuestas correctas no llegan al navegador antes de responder, y un intento enviado no se puede modificar. |
-| Configuración expuesta | Las credenciales están en `config/config.php`, que no se sube al repositorio. Las carpetas internas no se pueden abrir desde el navegador. |
+| Configuración expuesta | Las credenciales están en `config/config.php`, que no se sube al repositorio. La configuración de ejemplo viene en modo `produccion`, que no muestra los errores internos. Las carpetas internas no se pueden abrir desde el navegador. |
 
 ### Pruebas realizadas
 
-- **58 pruebas automatizadas**, todas superadas, en `tests/ejecutar.php`. Cada una verifica un criterio de aceptación de las historias de usuario. Instalan una base de datos de prueba desde cero, recorren la aplicación como lo haría un navegador y la borran al terminar.
-- **Recorrido en Chrome** (registro, práctica, evaluación, progreso y paneles de administración) en pantallas de computador (1280 px), tableta (768 px) y celular (360 px): sin errores en la consola y sin desplazamiento horizontal.
+- **58 pruebas automatizadas** en `tests/ejecutar.php`. Cada una verifica un criterio de aceptación de las historias de usuario. Instalan una base de datos de prueba desde cero, recorren la aplicación como lo haría un navegador y la borran al terminar.
+- **Recorrido en Chrome** (registro, práctica, evaluación, progreso y paneles de administración) en pantallas de computador (1280 px), tableta (768 px) y celular (360 px).
 - **Prueba en Apache** con el proyecto en una subcarpeta, igual que en XAMPP. Las carpetas `app`, `config`, `database`, `tests` y `.git` responden con 403, es decir, no se pueden abrir desde el navegador.
 
-Las pruebas se ejecutaron con PHP 8.3 y MariaDB 10.11. Falta correrlas en el XAMPP de cada integrante (ver pendientes).
+Las pruebas se ejecutaron con PHP 8.3 y MariaDB 10.11, y todas se superaron antes de los ajustes del 15/11/2026 (ver pendientes).
 
 ---
 
@@ -118,10 +120,12 @@ Las pruebas se ejecutaron con PHP 8.3 y MariaDB 10.11. Falta correrlas en el XAM
 
 | Pendiente | Responsable | Por qué |
 |---|---|---|
+| Volver a correr las 58 pruebas y el recorrido en Chrome | Equipo | Después de los ajustes del 15/11/2026 (menú del administrador, sesión vencida, gráficas, orden de la práctica) solo se revisó la sintaxis; falta la ejecución completa con base de datos. |
 | Informar al asesor el cambio de Supabase a PHP + MySQL | Equipo | El documento ya describe PHP + MySQL; el código ahora coincide con él. |
 | Subir la rama `migracion-php` a GitHub y unirla a `main` | Jose Luis, o el integrante que agregue como colaborador | El repositorio está en la cuenta `Layoverv`. |
 | Instalar y correr las pruebas en el XAMPP de cada integrante | Cada integrante | Confirmar que todo funciona en Windows con la versión de XAMPP que tiene cada uno. |
 | Revisar el contenido APA de los temas y ejercicios | Asesor | Riesgo R3: errores en el contenido normativo. |
+| Agregar ejercicios avanzados en Citas textuales cortas y Paráfrasis | Generador de contenidos y asesor | Hoy cada uno tiene un solo ejercicio avanzado. |
 | Cambiar `contacto_datos` en `config/config.php` por el correo real del equipo | Equipo | Aparece en la política de tratamiento de datos. |
 | Decidir si se reporta la exportación CSV (HU-13) | Equipo y asesor | El documento la dejó fuera de esta versión, pero el prototipo anterior ya exportaba resultados y se conservó. |
 | Aclarar el tipo de ejercicio «completar» | Equipo y asesor | Se resuelve eligiendo la opción que completa la frase, no escribiendo texto libre. |
@@ -137,7 +141,7 @@ Requisitos: XAMPP con PHP 8.1 o superior y MariaDB o MySQL. Apache debe tener ac
 
 1. Copia la carpeta del proyecto en `C:\xampp\htdocs\apa-interactivo`.
 2. En el panel de XAMPP, inicia **Apache** y **MySQL**.
-3. Copia `config\config.example.php` como `config\config.php`. Con un XAMPP recién instalado sirve tal cual (usuario `root`, sin contraseña).
+3. Copia `config\config.example.php` como `config\config.php`. Con un XAMPP recién instalado la conexión sirve tal cual (usuario `root`, sin contraseña). Viene en modo `produccion`; cámbialo a `desarrollo` solo si necesitas ver el detalle de un error mientras programas.
 4. Abre una consola en la carpeta del proyecto y ejecuta:
    ```
    C:\xampp\php\php.exe database\instalar.php
@@ -152,6 +156,8 @@ Requisitos: XAMPP con PHP 8.1 o superior y MariaDB o MySQL. Apache debe tener ac
 1. Los estudiantes crean su cuenta en **Crear cuenta**.
 2. En **Usuarios**, el administrador crea a los profesores y al generador de contenidos con una contraseña temporal. Al entrar por primera vez, ellos aceptan la política de datos y cambian la contraseña.
 3. En **Grupos**, el administrador crea cada grupo, le asigna su profesor y agrega a los estudiantes.
+
+Si un estudiante olvida su contraseña, el administrador la restablece desde **Usuarios** con una contraseña temporal.
 
 ### Ejecutar las pruebas
 

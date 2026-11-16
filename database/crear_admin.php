@@ -8,10 +8,20 @@ if (PHP_SAPI !== 'cli') {
     http_response_code(403);
     exit('Solo se ejecuta desde la consola.');
 }
-$config = require (getenv('APA_CONFIG') ?: dirname(__DIR__) . '/config/config.php');
+$rutaConfig = getenv('APA_CONFIG') ?: dirname(__DIR__) . '/config/config.php';
+if (!is_file($rutaConfig)) {
+    fwrite(STDERR, "No existe config/config.php. Copia config/config.example.php como config/config.php y ajusta la conexión.\n");
+    exit(1);
+}
+$config = require $rutaConfig;
 $db = $config['db'];
-$pdo = new PDO(sprintf('mysql:host=%s;port=%d;dbname=%s;charset=utf8mb4', $db['host'], (int) $db['puerto'], $db['nombre']),
-    $db['usuario'], $db['clave'], [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
+try {
+    $pdo = new PDO(sprintf('mysql:host=%s;port=%d;dbname=%s;charset=utf8mb4', $db['host'], (int) $db['puerto'], $db['nombre']),
+        $db['usuario'], $db['clave'], [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
+} catch (PDOException $e) {
+    fwrite(STDERR, "No fue posible conectar con la base de datos. ¿Está iniciado MySQL en XAMPP y ya se instaló la base?\n" . $e->getMessage() . "\n");
+    exit(1);
+}
 
 $o = getopt('', ['nombre:', 'correo:', 'clave:']);
 echo 'Nombre completo: ';

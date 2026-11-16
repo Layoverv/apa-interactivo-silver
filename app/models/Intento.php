@@ -77,7 +77,7 @@ final class Intento
     public static function resumenPractica(int $usuarioId): array
     {
         return DB::fila(
-            "SELECT COUNT(DISTINCT i.id) AS sesiones, COUNT(r.opcion_id) AS respondidas, COALESCE(SUM(r.es_correcta = 1), 0) AS correctas
+            "SELECT COUNT(DISTINCT CASE WHEN r.opcion_id IS NOT NULL THEN i.id END) AS sesiones, COUNT(r.opcion_id) AS respondidas, COALESCE(SUM(r.es_correcta = 1), 0) AS correctas
              FROM intentos i LEFT JOIN respuestas r ON r.intento_id = i.id
              WHERE i.usuario_id = ? AND i.modo = 'practica'",
             [$usuarioId]

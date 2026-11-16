@@ -26,11 +26,12 @@ $router->get('/registro', [AuthController::class, 'formularioRegistro']);
 $router->post('/registro', [AuthController::class, 'registrar']);
 $router->get('/ingresar', [AuthController::class, 'formularioIngreso']);
 $router->post('/ingresar', [AuthController::class, 'ingresar']);
-$router->post('/salir', [AuthController::class, 'salir']);
+$router->post('/salir', [AuthController::class, 'salir'], []);
 $router->get('/aceptar-politica', [AuthController::class, 'formularioAceptarPolitica'], []);
 $router->post('/aceptar-politica', [AuthController::class, 'aceptarPolitica'], []);
 $router->get('/cambiar-clave', [AuthController::class, 'formularioCambiarClave'], []);
 $router->post('/cambiar-clave', [AuthController::class, 'cambiarClave'], []);
+$router->get('/api/sesion', [AuthController::class, 'mantenerSesion'], []);
 
 // Módulo 1: contenido (HU-03, HU-04) y recursos (HU-10)
 $router->get('/temas', [ContenidoController::class, 'lista'], []);

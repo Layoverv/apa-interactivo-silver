@@ -85,10 +85,10 @@
       if (r) {
         if (opcion.id === r.opcion_correcta_id) {
           fila.classList.add('opcion-correcta');
-          etiqueta.appendChild(crear('span', 'marca', ' ✓ Respuesta correcta'));
+          etiqueta.appendChild(crear('span', 'opcion-marca', ' ✓ Respuesta correcta'));
         } else if (opcion.id === r.opcion_id) {
           fila.classList.add('opcion-incorrecta');
-          etiqueta.appendChild(crear('span', 'marca', ' ✗ Tu respuesta'));
+          etiqueta.appendChild(crear('span', 'opcion-marca', ' ✗ Tu respuesta'));
         }
       }
       fila.appendChild(input);

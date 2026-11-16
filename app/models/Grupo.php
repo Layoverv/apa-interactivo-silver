@@ -82,6 +82,11 @@ final class Grupo
         DB::consulta('DELETE FROM usuario_grupo WHERE grupo_id = ? AND usuario_id = ?', [$grupoId, $usuarioId]);
     }
 
+    public static function quitarDeTodos(int $usuarioId): void
+    {
+        DB::consulta('DELETE FROM usuario_grupo WHERE usuario_id = ?', [$usuarioId]);
+    }
+
     public static function deEstudiante(int $usuarioId): array
     {
         return DB::filas(

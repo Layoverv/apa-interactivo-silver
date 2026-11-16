@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 use App\Core\Csrf;
 use App\Core\HttpException;
+use App\Core\Sesion;
 
 /** Escapa un valor para mostrarlo en HTML (prevención de XSS). */
 function e(mixed $valor): string
@@ -81,6 +82,19 @@ function json_respuesta(array $datos, int $estado = 200): never
     header('Content-Type: application/json; charset=utf-8');
     echo json_encode($datos, JSON_UNESCAPED_UNICODE);
     exit;
+}
+
+/**
+ * Vuelve al formulario tras un error de validación: muestra los mensajes y conserva lo que
+ * el usuario escribió (sin las contraseñas).
+ */
+function volver_con_errores(array $errores, string $ruta): never
+{
+    foreach ($errores as $error) {
+        Sesion::flash('danger', $error);
+    }
+    Sesion::guardarFormulario($_POST);
+    redirigir($ruta);
 }
 
 function abortar(int $estado, string $mensaje = ''): never

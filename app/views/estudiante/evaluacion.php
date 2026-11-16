@@ -15,7 +15,8 @@
     <?php endforeach; ?>
   </nav>
 
-  <form method="post" action="<?= e(url('/evaluacion/' . $intento['id'] . '/enviar')) ?>" id="formulario-evaluacion" data-total="<?= $total ?>">
+  <form method="post" action="<?= e(url('/evaluacion/' . $intento['id'] . '/enviar')) ?>" id="formulario-evaluacion" data-total="<?= $total ?>" data-intento="<?= (int) $intento['id'] ?>" data-sesion="<?= e(url('/api/sesion')) ?>">
+    <p class="alert alert-warning d-none" id="aviso-sesion" role="alert"></p>
     <?= csrf_campo() ?>
     <?php foreach ($ejercicios as $i => $e): $falta = in_array((int) $e['id'], $faltantes, true); ?>
       <fieldset class="card tarjeta pregunta mb-3<?= $falta ? ' pregunta-faltante' : '' ?>" id="pregunta-<?= $i + 1 ?>" data-indice="<?= $i ?>">

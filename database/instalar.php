@@ -7,7 +7,7 @@ declare(strict_types=1);
 //   php database/instalar.php
 //
 // En XAMPP para Windows: C:\xampp\php\php.exe database\instalar.php
-// También se puede instalar a mano desde phpMyAdmin (ver docs/04-instalacion.md).
+// También se puede instalar a mano desde phpMyAdmin (ver la sección de instalación del README).
 
 if (PHP_SAPI !== 'cli') {
     http_response_code(403);
